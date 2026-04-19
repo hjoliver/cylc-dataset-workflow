@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -eu
+
+usage() {
+  cat <<EOF
+USAGE: autofix FILE
+
+  Automatically fix an invalid data file.
+  If SHAPE or COLOR is not defined, insert "unknown".
+EOF
+}
+
+if [[ $# != 1 ]]; then
+  usage
+  exit 1
+fi
+
+FILE=$1
+
+unset COLOR SHAPE
+tmpfile=$(mktemp)
+grep '=' $FILE >$tmpfile
+. $tmpfile
+
+FIXED=false
+if [[ -z "${COLOR:-}" ]]; then
+  FIXED=true
+  echo COLOR=unknown >>$FILE
+fi
+if [[ -z "${SHAPE:-}" ]]; then
+  FIXED=true
+  echo SHAPE=unknown >>$FILE
+fi
+
+if $FIXED; then
+  echo "Auto-fixed $FILE"
+else
+  echo "Auto-fix not needed for $FILE"
+fi

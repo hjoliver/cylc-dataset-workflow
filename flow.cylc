@@ -1,0 +1,37 @@
+#!Jinja2
+{% set DATASET_LBL = "${CYLC_TASK_CYCLE_POINT}" %}
+{% set DATASET_SRC = "~/data/data-" + DATASET_LBL + ".dat" %}
+{% set DATASET_WRK = "${CYLC_WORKFLOW_SHARE_DIR}/" + DATASET_LBL + ".dat" %}
+{% set PRODUCT_WRK = "${CYLC_WORKFLOW_SHARE_DIR}/" + DATASET_LBL + ".prd" %}
+{% set MANIFEST    = "${CYLC_WORKFLOW_SHARE_DIR}/manifest" %}
+{% set PRODUCT_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/products" %}
+{% set AUTO_FIX = AUTOFIX | default(False) %}
+
+[scheduling]
+    cycling mode = integer
+    initial cycle point = 0
+    final cycle point = 9
+    [[graph]]
+        P1 = """
+            get-data => validate
+        {% if AUTO_FIX %}
+            validate:failed? => autofix => revalidate
+            validate? | revalidate => process
+        {% else %}
+            validate => process
+        {% endif %}
+            process[-P1] => process => publish
+        """
+[runtime]
+    [[root]]
+        pre-script = sleep 0  # (make the tasks run slower)
+    [[get-data]]
+        script = "cp {{DATASET_SRC}} {{DATASET_WRK}}"
+    [[validate, revalidate]]
+        script = "validate {{DATASET_WRK}}"
+    [[autofix]]
+        script = "autofix {{DATASET_WRK}}"
+    [[process]]
+        script = "process {{DATASET_WRK}} {{PRODUCT_WRK}} >> {{MANIFEST}}"
+    [[publish]]
+        script = "publish {{PRODUCT_WRK}} {{PRODUCT_DIR}}"

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -eu
+
+usage() {
+  cat <<EOF
+USAGE: process FILE PROD
+
+  Process a data file FILE to:
+  - generate a product file PROD
+  - write a summary of processing stdout
+
+  Fails is FILE does not define COLOR and SHAPE.
+EOF
+}
+
+if [[ $# != 2 ]]; then
+  usage
+  exit 1
+fi
+
+FILE=$1
+PROD=$2
+
+unset COLOR SHAPE
+tmpfile=$(mktemp)
+grep '=' $FILE >$tmpfile
+. $tmpfile
+
+# Make the product
+mkdir -p $(dirname $PROD)
+cat <<EOF >$PROD
+# PRODUCT $$
+SHAPE: $SHAPE
+COLOR: $COLOR
+EOF
+
+# Print the summmary
+echo "Product: a ${COLOR}-colored ${SHAPE}-shape."

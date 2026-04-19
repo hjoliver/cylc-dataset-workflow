@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -eu
+
+usage() {
+  cat <<EOF
+USAGE: validate FILE
+   Validate the content of a data file.
+   A valid file must define both SHAPE and COLOR.
+EOF
+}
+
+if [[ $# != 1 ]]; then
+  usage
+  exit 1
+fi
+
+FILE=$1
+echo "Checking $FILE validity"
+
+unset COLOR SHAPE
+tmpfile=$(mktemp)
+grep '=' $FILE >$tmpfile
+. $tmpfile
+
+if [[ -z "${COLOR:-}" || -z "${SHAPE:-}" ]]; then
+  echo "ERROR $FILE is not valid" >&2
+  exit 1
+else
+  echo "$FILE is valid"
+fi

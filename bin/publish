@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -eu
+
+usage() {
+  cat <<EOF
+USAGE: publish PRODUCT PROD_DIR
+
+  Publish PRODUCT to PROD_DIR 
+
+EOF
+}
+
+if [[ $# != 2 ]]; then
+  usage
+  exit 1
+fi
+
+PRODUCT=$1
+PRODDIR=$2
+
+echo "Publishing ${PRODUCT} to ${PRODDIR}."
+mkdir -p $PRODDIR
+cp $PRODUCT $PRODDIR
+echo "DONE"
