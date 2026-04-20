@@ -36,6 +36,9 @@ will fail, but it can be fixed (manually or with the `autofix` script).
 The `flow.cylc` file should define a task to run each script, and configure
 them to use the shared workspace `$CYLC_WORKFLOW_SHARE_DIR`.
 
+We can use integer cycling with the task cycle point directly corresponding
+to the dataset label.
+
 The scripts in this example are easily configured via the command line, so
 the full workflow configuration to read all datasets from `~/data/`, validate,
 process, publish to `~/products`, and write an ordered processing manifest,
