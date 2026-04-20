@@ -146,8 +146,8 @@ and run the workflow again with the "autofix" sub-graph switched on:
 $ cylc vip --no-detach --set="AUTO_FIX=True" dataproc
 ```
 
-Now the graph has alternate paths from the `validate:succeeded?` and
-`validate:failed?` outputs, to automatically detect and fix invalid datasets
+Now the graph has alternate paths from the `validate:succeeded` and
+`validate:failed` outputs, to automatically detect and fix invalid datasets
 with no manual intervention required.
 
 ![autofix graph](img/graph-1.png)
