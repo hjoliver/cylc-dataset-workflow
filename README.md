@@ -4,9 +4,8 @@
 *tasks* that cooperate via a shared IO workspace, with *dependencies* to
 make the tasks run in the right order.
 
-*Cycling workflows* can process arbitrarily many datasets. This is very
-efficient in Cylc because
-[Cylc has no barrier between cycles](https://cylc.github.io/cylc-doc/stable/html/user-guide/introduction.html#admonition-2).
+*Cycling workflows* can process arbitrarily many datasets - very
+efficiently [because Cylc has no barrier between cycles](https://cylc.github.io/cylc-doc/stable/html/user-guide/introduction.html#admonition-2).
 
 ## Example
 
@@ -140,7 +139,7 @@ workflow will then run to completion.
 $ cylc trigger dataproc //4/get-data //4/validate
 ```
 
-Now break `~/data/data-4.dat` again in the (by deleting the `SHAPE` line)
+Now break `~/data/data-4.dat` again (by deleting the `SHAPE` line)
 and run the workflow again with the "autofix" sub-graph switched on:
 
 ```
@@ -178,11 +177,13 @@ See [Installing workflows](https://cylc.github.io/cylc-doc/stable/html/user-guid
 clean up symlinked locations and other platforms.
 - In this example, the inter-cycle dependence `process[-P1] => process`
 ensures that the manifest file is correctly ordered, and it "joins up"
-the workflow into a single graph. If you remove that, there will be
-no dependence between cycles and Cylc will process datasets entirely
-in parallel, out to a maximum of 5 at once
-[by default](https://cylc.github.io/cylc-doc/stable/html/reference/config/workflow.html#flow.cylc[scheduling]runahead%20limit).
+the workflow into a single graph.
+   - Everything upstream of the `process` tasks can run immediately,
+     out to a maximum of 5 cycles at once - the default
+   [runahead limit](https://cylc.github.io/cylc-doc/stable/html/reference/config/workflow.html#flow.cylc[scheduling]runahead%20limit).
+   - If you remove the inter-cycle dependence, Cylc can process all
+    the datasets at once (again, out to the runahead limit).
 - `$CYLC_WORKFLOW_SHARE_DIR` is one of several
 [Cylc-defined environment variables](https://cylc.github.io/cylc-doc/stable/html/reference/job-script-vars/index.html)
-passed to task jobs scripts (often only the task cycle point and the
-workflow share directory are needed).
+passed to task jobs scripts. Often you'll only need the task cycle point
+and the workflow share directory.
