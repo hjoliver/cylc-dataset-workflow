@@ -152,6 +152,10 @@ with no manual intervention required.
 
 ![autofix graph](img/graph-1.png)
 
+Note the `revalidate` task ensures that the workflow will stall if a dataset
+is invalid for reasons not handled by the `autofix` task - we don't just
+assume it is fixed and carry on regardless.
+
 # Things to note
 
 - The scripts in this example are configured by command line arguments.
