@@ -1,0 +1,16 @@
+[scheduling]
+    cycling mode = integer
+    initial cycle point = 0
+    final cycle point = 9
+    [[graph]]
+        P1 = """get-data => validate => process => publish
+                process[-P1] => process"""
+[runtime]
+    [[get-data]]
+        script = "cp ~/data/data-${CYLC_TASK_CYCLE_POINT}.dat ${CYLC_WORKFLOW_SHARE_DIR}/${CYLC_TASK_CYCLE_POINT}.dat"
+    [[validate]]
+        script = "validate ${CYLC_WORKFLOW_SHARE_DIR}/${CYLC_TASK_CYCLE_POINT}.dat"
+    [[process]]
+        script = "process ${CYLC_WORKFLOW_SHARE_DIR}/${CYLC_TASK_CYCLE_POINT}.dat ${CYLC_WORKFLOW_SHARE_DIR}/${CYLC_TASK_CYCLE_POINT}.prd >> ~/products/manifest"
+    [[publish]]
+        script = "publish ${CYLC_WORKFLOW_SHARE_DIR}/${CYLC_TASK_CYCLE_POINT}.prd ~/products/"

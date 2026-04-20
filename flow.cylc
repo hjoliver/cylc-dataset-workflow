@@ -3,9 +3,9 @@
 {% set DATASET_SRC = "~/data/data-" + DATASET_LBL + ".dat" %}
 {% set DATASET_WRK = "${CYLC_WORKFLOW_SHARE_DIR}/" + DATASET_LBL + ".dat" %}
 {% set PRODUCT_WRK = "${CYLC_WORKFLOW_SHARE_DIR}/" + DATASET_LBL + ".prd" %}
-{% set MANIFEST    = "${CYLC_WORKFLOW_SHARE_DIR}/manifest" %}
-{% set PRODUCT_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/products" %}
-{% set AUTO_FIX = AUTOFIX | default(False) %}
+{% set PRODUCT_DIR = "~/products/" %}
+{% set SUMMARY_FLE = PRODUCT_DIR + "/manifest" %}
+{% set AUTO_FIX = AUTO_FIX | default(False) %}  {# can set from cylc CLI #}
 
 [scheduling]
     cycling mode = integer
@@ -24,7 +24,7 @@
         """
 [runtime]
     [[root]]
-        pre-script = sleep 0  # (make the tasks run slower)
+        pre-script = sleep 10  # (make the tasks run slower)
     [[get-data]]
         script = "cp {{DATASET_SRC}} {{DATASET_WRK}}"
     [[validate, revalidate]]
@@ -32,6 +32,6 @@
     [[autofix]]
         script = "autofix {{DATASET_WRK}}"
     [[process]]
-        script = "process {{DATASET_WRK}} {{PRODUCT_WRK}} >> {{MANIFEST}}"
+        script = "process {{DATASET_WRK}} {{PRODUCT_WRK}} >> {{SUMMARY_FLE}}"
     [[publish]]
         script = "publish {{PRODUCT_WRK}} {{PRODUCT_DIR}}"
