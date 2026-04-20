@@ -34,7 +34,8 @@ will fail, but it can be fixed (manually or with the `autofix` script).
 ## The Workflow
 
 The `flow.cylc` file should define a task to run each script, and configure
-them to use the shared workspace `$CYLC_WORKFLOW_SHARE_DIR`.
+them to use the (workflow-specific) shared workspace
+`$CYLC_WORKFLOW_SHARE_DIR`.
 
 We can use integer cycling with the task cycle point directly corresponding
 to the dataset label.
@@ -181,4 +182,7 @@ the workflow into a single graph. If you remove that, there will be
 no dependence between cycles and Cylc will process datasets entirely
 in parallel, out to a maximum of 5 at once
 [by default](https://cylc.github.io/cylc-doc/stable/html/reference/config/workflow.html#flow.cylc[scheduling]runahead%20limit).
-
+- `$CYLC_WORKFLOW_SHARE_DIR` is one of several
+[Cylc-defined environment variables](https://cylc.github.io/cylc-doc/stable/html/reference/job-script-vars/index.html)
+passed to task jobs scripts (often only the task cycle point and the
+workflow share directory are needed).
