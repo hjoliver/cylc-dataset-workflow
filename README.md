@@ -117,13 +117,15 @@ Clone this repository to `~/cylc-src/dataproc`:
 $ git clone git@github.com:hjoliver/cylc-dataset-workflow.git ~/cylc-src/dataproc
 ```
 
-Copy the `data` directory to `~/data/`. Products are written to `~/products/`.
-(Or update the `flow.cylc` file to use different locations).
+Copy the `data` directory to `~/data/`. Products will be written to `~/products/`.
+To use different data source or product locations just update the `flow.cylc`.
 
 Validate, install, and run the workflow, like this:
 ```
 $ cylc vip --no-detach dataproc
 ```
+
+![default graph](img/graph-0.png)
 
 Use `cylc tui` or the web UI to monitor progress.
 
@@ -136,8 +138,6 @@ workflow will then run to completion.
 ```
 $ cylc trigger dataproc //4/get-data //4/validate
 ```
-
-![default graph](img/graph-0.png)
 
 Now break `~/data/data-4.dat` again in the (by deleting the `SHAPE` line)
 and run the workflow again with the "autofix" sub-graph switched on:
