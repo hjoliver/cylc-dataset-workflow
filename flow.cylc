@@ -16,11 +16,11 @@
             get-data => validate
         {% if AUTO_FIX %}
             validate:failed? => autofix => revalidate
-            validate? | revalidate => process
+            validate? | revalidate => process => publish
         {% else %}
-            validate => process
+            validate => process => publish
         {% endif %}
-            process[-P1] => process => publish
+            process[-P1] => process
         """
 [runtime]
     [[root]]
