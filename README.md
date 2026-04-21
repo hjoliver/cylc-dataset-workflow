@@ -1,4 +1,4 @@
-# Writing a Cylc workflow to process many datasets
+# Writing a Cylc workflow To Process Many Datasets
 
 [Cylc](https://cylc/org) workflows configure a bunch of applications to run as
 *tasks* that cooperate via a shared IO workspace, with *dependencies* to
@@ -176,6 +176,7 @@ passed to task jobs scripts. Often you'll only need the task cycle point
 and the workflow share directory.
 - If new datasets are continually being generated, just delete the
 `final cycle point` and the workflow will continue running indefinitely.
+(This may need datetime cycling and clock-triggered retrieval tasks).
 - If the datasets are large or many, add housekeeping tasks to
 delete files from earlier cycles at runtime.
 - If your workflow needs to be distributed across platforms, just add
