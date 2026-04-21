@@ -110,7 +110,7 @@ graph to automatically handle invalid datasets (the `AUTO_FIX` flag):
 Note the Jinja2 template code gets processed at start-up - use `cylc view ` to
 see the resulting workflow configuration.
 
-### How to run it
+### How To Run It
 
 Clone this repository to `~/cylc-src/dataproc`:
 ```
@@ -156,12 +156,24 @@ Note the `revalidate` task ensures that the workflow will stall if a dataset
 is invalid for reasons not handled by the `autofix` task - we don't just
 assume it is fixed and carry on regardless.
 
-# Things to note
+## Things To Note
 
+- In this example, the inter-cycle dependence `process[-P1] => process`
+ensures that the manifest file is correctly ordered, and it "joins up"
+the workflow into a single graph.
+   - Everything upstream of the `process` tasks can run immediately,
+     out to a maximum of 5 cycles at once - the default
+   [runahead limit](https://cylc.github.io/cylc-doc/stable/html/reference/config/workflow.html#flow.cylc[scheduling]runahead%20limit).
+   - If you remove the inter-cycle dependence, Cylc can process all
+    the datasets at once (again, out to the runahead limit).
 - The scripts in this example are configured by command line arguments.
 Applications that take inputs from the environment can be configured with
 `flow.cylc` task `[environment]` sections. For more complex applications,
 configuration files should be added to the workflow source directory.
+- `$CYLC_WORKFLOW_SHARE_DIR` is one of several
+[Cylc-defined environment variables](https://cylc.github.io/cylc-doc/stable/html/reference/job-script-vars/index.html)
+passed to task jobs scripts. Often you'll only need the task cycle point
+and the workflow share directory.
 - If new datasets are continually being generated, just delete the
 `final cycle point` and the workflow will continue running indefinitely.
 - If the datasets are large or many, add housekeeping tasks to
@@ -173,17 +185,6 @@ tasks to the graph to transfer files between platforms as needed
 can be configured to use another path and symlink that to the standard
 home location.
 See [Installing workflows](https://cylc.github.io/cylc-doc/stable/html/user-guide/installing-workflows.html).
-- Use `cylc clean` to remove workflows once finished - it will also
-clean up symlinked locations and other platforms.
-- In this example, the inter-cycle dependence `process[-P1] => process`
-ensures that the manifest file is correctly ordered, and it "joins up"
-the workflow into a single graph.
-   - Everything upstream of the `process` tasks can run immediately,
-     out to a maximum of 5 cycles at once - the default
-   [runahead limit](https://cylc.github.io/cylc-doc/stable/html/reference/config/workflow.html#flow.cylc[scheduling]runahead%20limit).
-   - If you remove the inter-cycle dependence, Cylc can process all
-    the datasets at once (again, out to the runahead limit).
-- `$CYLC_WORKFLOW_SHARE_DIR` is one of several
-[Cylc-defined environment variables](https://cylc.github.io/cylc-doc/stable/html/reference/job-script-vars/index.html)
-passed to task jobs scripts. Often you'll only need the task cycle point
-and the workflow share directory.
+- Use `cylc clean` to remove installed workflows once finished - it will
+automatically clean symlinked install locations, even on other platforms
+(for distributed workflows).
