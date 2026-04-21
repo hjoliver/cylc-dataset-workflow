@@ -161,9 +161,10 @@ assume it is fixed and carry on regardless.
 - In this example, the inter-cycle dependence `process[-P1] => process`
 ensures that the manifest file is correctly ordered, and it "joins up"
 the workflow into a single graph.
-   - Everything upstream of the `process` tasks can run immediately,
-     out to a maximum of 5 cycles at once - the default
-   [runahead limit](https://cylc.github.io/cylc-doc/stable/html/reference/config/workflow.html#flow.cylc[scheduling]runahead%20limit).
+   - All the `get-data` tasks can run immediately, at once,
+     out to a maximum of 5 cycles at ahead (the default
+   [runahead limit](https://cylc.github.io/cylc-doc/stable/html/reference/config/workflow.html#flow.cylc[scheduling]runahead%20limit))
+   because they don't have to wait on any other tasks.
    - If you remove the inter-cycle dependence, Cylc can process all
     the datasets at once (again, out to the runahead limit).
 - The scripts in this example are configured by command line arguments.
